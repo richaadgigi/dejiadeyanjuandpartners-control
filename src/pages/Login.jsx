@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import ErrorAlert from '../components/alerts/Error';
 import SuccessAlert from '../components/alerts/Success';
@@ -26,6 +26,11 @@ const Login = () => {
             }, 2800);
         }
     }
+    useEffect(() => {
+        if(cookies.get('lfr-access-key') !== undefined){
+            navigate('/stories');
+        }
+    })
     return (
         <>
         <section className='dap-fixed dap-bg-primary xui-d-flex xui-flex-ai-center xui-flex-jc-center'>

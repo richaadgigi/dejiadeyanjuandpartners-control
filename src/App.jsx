@@ -16,10 +16,10 @@ const App = () => {
             <Navbar />
             <ScrollToTop />
             <Routes>
-                <Route index path='/' element={<Protected redirect><Login /></Protected>} />
+                <Route index path='/' element={<Protected redirect={true}><Login /></Protected>} />
                 <Route path='/stories' element={<Protected><Stories /></Protected>} />
                 <Route path='/story/add' element={<Protected><StoryAdd /></Protected>} />
-                <Route path='/story/edit/:uid/:stripped' element={<Protected><StoryDetails /></Protected>} />
+                <Route path='/story/:uid/:stripped' element={<Protected><StoryDetails /></Protected>} />
             </Routes>
         </BrowserRouter>
         </>
