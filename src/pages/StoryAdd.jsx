@@ -1,11 +1,11 @@
 import { ArrowLeft, Camera, Pen } from '@carbon/icons-react';
-import { Editor } from '@tinymce/tinymce-react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import ErrorAlert from '../components/alerts/Error';
 import SuccessAlert from '../components/alerts/Success';
+import tinymce from 'tinymce';
 
 const StoryAdd = () => {
     const navigate = useNavigate();
@@ -33,7 +33,7 @@ const StoryAdd = () => {
     const addPost = (fields) => {
         const formdata = new FormData();
         formdata.append("title", fields.title);
-        formdata.append("details", editorContent);
+        formdata.append("details", fields.details);
         formdata.append("category_unique_id", fields.category_unique_id);
         formdata.append("alt_text", fields.alt_text);
         formdata.append("image", fields.image[0]);
@@ -81,6 +81,13 @@ const StoryAdd = () => {
     };
     useEffect(() => {
         getAllCategories();
+        setTimeout(() => {
+            tinymce.init({
+                selector: '#mytextarea',
+                plugins: 'link image code',
+                toolbar: 'undo redo | bold italic | alignleft aligncenter alignright'
+            });
+        }, 0);
     }, []);
     return (
         <>
@@ -114,15 +121,20 @@ const StoryAdd = () => {
                     </div>}
                     <div className='xui-form-box'>
                         <label htmlFor="">Post Content</label>
-                        <Editor 
-                            apiKey='fafpuuzz4dst2os1yr189u8t5ygv8xcc4v8kwklolx80ddxm'
+                        <textarea id="mytextarea" {...register('details')}>Hello, World!</textarea>
+                        {/* <Editor 
+                            // apiKey='fafpuuzz4dst2os1yr189u8t5ygv8xcc4v8kwklolx80ddxm'
                             init={{
+                                skin: false,
+                                content_css: false,
+                                height: 500,
+                                menubar: false,
                                 plugins: 'link image code',
                                 toolbar: 'undo redo | bold italic | alignleft aligncenter alignright'
                             }}
                             onEditorChange={(content, editor) => setEditorContent(content)}
                             initialValue='This is a description'
-                        />
+                        /> */}
                     </div>
                     <div className='xui-form-box'>
                         <label htmlFor="alt_text">Alternative text</label>

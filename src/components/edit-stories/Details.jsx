@@ -1,10 +1,10 @@
 import { Checkmark, Pen } from '@carbon/icons-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import ErrorAlert from '../alerts/Error';
 import SuccessAlert from '../alerts/Success';
 import axios from 'axios';
-import { Editor } from '@tinymce/tinymce-react';
+import tinymce from 'tinymce';
 
 const Details = (props) => {
     const { data } = props;
@@ -16,7 +16,6 @@ const Details = (props) => {
     const changeDetails = (e) => {
         e.preventDefault();
         if(editorContent !== "" && editorContent !== null && editorContent !== undefined){
-            console.log(editorContent);
             setIsDisabled(true);
             axios({
                 method: "PUT",
@@ -49,20 +48,21 @@ const Details = (props) => {
             setErrorMsg("Please type in your content");
         }
     }
+    useEffect(() => {
+        setTimeout(() => {
+            tinymce.init({
+                selector: '#mytextarea',
+                plugins: 'link image code',
+                toolbar: 'undo redo | bold italic | alignleft aligncenter alignright'
+            });
+        }, 0);
+    }, []);
     return (
         <>
         <form className='xui-form xui-max-w-600' onSubmit={(e) => {changeDetails(e)}} noValidate>
             <div className='xui-form-box'>
                 <label htmlFor="">Post Content</label>
-                <Editor 
-                    apiKey='fafpuuzz4dst2os1yr189u8t5ygv8xcc4v8kwklolx80ddxm'
-                    init={{
-                        plugins: 'link image code',
-                        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright'
-                    }}
-                    initialValue={data.details}
-                    onEditorChange={(content, editor) => setEditorContent(content)}
-                />
+                <textarea id="mytextarea">{data.details}</textarea>
                 {errorMsg && <span className='xui-form-error-msg'>{errorMsg}</span>}
                 <br />
                 <button type='submit' className='xui-d-inline-flex xui-flex-ai-center xui-grid-gap-half xui-bdr-rad-half xui-btn xui-bdr-fade xui-bdr-w-1 xui-bdr-s-solid xui-font-sz-85' disabled={isDisabled}>

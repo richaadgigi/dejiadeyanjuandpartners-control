@@ -134,7 +134,7 @@ const StoryDetails = () => {
                 <Image data={story} />
             </div>
         </section>
-        <section className='xui-modal' xui-modal="deletePostModal" display={'true'} disable-click-on-outside={'true'}>
+        <section className='xui-modal' xui-modal="deletePostModal" disable-click-on-outside={'true'}>
             <div className='xui-modal-content'>
                 <div className='xui-h-250 xui-lg-h-300 xui-bg-lazy xui-bg-sz-cover xui-bg-pos-center' xui-bg-img={story.image}></div>
                 <div className='xui-mt-2 xui-text-center'>

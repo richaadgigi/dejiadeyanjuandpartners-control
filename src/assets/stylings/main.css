@@ -44,3 +44,18 @@ button {
     top: 0;
     left: 0;
 }
+.dap-story-box {
+    padding-bottom: 250px;
+    position: relative;
+}
+.dap-story-box-image {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+}
+.dap-content-box img {
+    max-width: 500px !important;
+    width: 100% !important;
+    height: 100%;
+}

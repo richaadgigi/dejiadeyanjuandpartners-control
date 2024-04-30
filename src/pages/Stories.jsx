@@ -20,6 +20,7 @@ const Stories = () => {
             
         })
         .finally(() => {
+            window.xuiLazyLoadings();
         });
     }, []);
     return (
