@@ -1,18 +1,18 @@
 import { ArrowLeft, Camera, Pen } from '@carbon/icons-react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import ErrorAlert from '../components/alerts/Error';
 import SuccessAlert from '../components/alerts/Success';
-import tinymce from 'tinymce';
+import BundledEditor from '../BundledEditor';
 
 const StoryAdd = () => {
     const navigate = useNavigate();
+    const editorRef = useRef(null);
     const [ isDisabled, setIsDisabled ] = useState(false);
     const [ image, setImage ] = useState(null);
     const [ categories, setCategories ] = useState(null);
-    const [ editorContent, setEditorContent ] = useState("");
     const [ validationErrMsg, setValidationErrMsg ] = useState('');
     const [ successErrMsg, setSuccessErrMsg ] = useState('');
     const { register, handleSubmit, formState: {errors} } = useForm();
@@ -33,7 +33,7 @@ const StoryAdd = () => {
     const addPost = (fields) => {
         const formdata = new FormData();
         formdata.append("title", fields.title);
-        formdata.append("details", fields.details);
+        formdata.append("details", editorRef.current.getContent() || 'This is a description');
         formdata.append("category_unique_id", fields.category_unique_id);
         formdata.append("alt_text", fields.alt_text);
         formdata.append("image", fields.image[0]);
@@ -81,13 +81,6 @@ const StoryAdd = () => {
     };
     useEffect(() => {
         getAllCategories();
-        setTimeout(() => {
-            tinymce.init({
-                selector: '#mytextarea',
-                plugins: 'link image code',
-                toolbar: 'undo redo | bold italic | alignleft aligncenter alignright'
-            });
-        }, 0);
     }, []);
     return (
         <>
@@ -121,20 +114,26 @@ const StoryAdd = () => {
                     </div>}
                     <div className='xui-form-box'>
                         <label htmlFor="">Post Content</label>
-                        <textarea id="mytextarea" {...register('details')}>Hello, World!</textarea>
-                        {/* <Editor 
-                            // apiKey='fafpuuzz4dst2os1yr189u8t5ygv8xcc4v8kwklolx80ddxm'
-                            init={{
+                        <BundledEditor
+							onInit={(evt, editor) => editorRef.current = editor}
+							initialValue={'This is a description'}
+							init={{
+								height: 300,
+								font_size_input_default_unit: "pt",
+								menubar: false,
                                 skin: false,
                                 content_css: false,
-                                height: 500,
-                                menubar: false,
-                                plugins: 'link image code',
-                                toolbar: 'undo redo | bold italic | alignleft aligncenter alignright'
-                            }}
-                            onEditorChange={(content, editor) => setEditorContent(content)}
-                            initialValue='This is a description'
-                        /> */}
+								plugins: [
+									'advlist', 'anchor', 'autolink', 'help', 'image', 'link', 'lists',
+									'searchreplace', 'table', 'wordcount'
+								],
+								toolbar: [
+									'undo redo | styles | bold italic forecolor fontsizeinput | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify | removeformat',
+								],
+								toolbar_mode: 'floating',
+								content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+							}}
+						/>
                     </div>
                     <div className='xui-form-box'>
                         <label htmlFor="alt_text">Alternative text</label>
