@@ -39,7 +39,7 @@ const StoryDetails = () => {
             }
         })
         .then((res) => {
-            setSuccessErrMsg(res.data.message);
+            setSuccessErrMsg(res.data.message || "Post deleted");
             window.xuiAnimeStart('successDelAlert');
             setTimeout(() => {
                 window.xuiAnimeEnd('successDelAlert');
